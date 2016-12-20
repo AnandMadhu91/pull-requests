@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Reddit Api</title>
+	</head>
+	<body>
+		<button type="button" class="input-button">Click Here</button>
+		<p class="output-text">Replace the content here</p>
+	</body>
+	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script>
+		$(".input-button").click(function(){
+			$(".output-text").text('Loading.....');
+			
+			<!-- Ajax callout -->
+			$.ajax({
+				type:"GET",
+				url: "https://www.reddit.com/r/aww/search.json?q=puppy&restrict_sr=true",
+				success: function(finalResult){
+					if(finalResult.hasOwnProperty("data")){
+						if(finalResult.data.hasOwnProperty("children")){
+							if(finalResult.data.children.hasOwnProperty("length")){
+								$(".output-text").html("<br>");
+								for(var i=0; i< finalResult.data.children.length; i++){
+									if(finalResult.data.children[i].hasOwnProperty("data")){
+										if(finalResult.data.children[i].data.hasOwnProperty("thumbnail")){
+											$(".output-text").append('<img src="'+finalResult.data.children[i].data["thumbnail"]+'">');
+											<!-- $(".output-text").append('<br>'); -->
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				datatype: 'jsonp',
+			});
+		});
+		
+	</script>
+</html> 
